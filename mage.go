@@ -3,7 +3,7 @@
 package main
 
 import (
-	"github.com/outillage/magefiles"
+	"github.com/aevea/magefiles"
 )
 
 func Test() error {

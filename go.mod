@@ -1,4 +1,4 @@
-module github.com/outillage/magefiles
+module github.com/aevea/magefiles
 
 go 1.13
 

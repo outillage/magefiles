@@ -1,6 +1,11 @@
 package magefiles
 
-import "github.com/magefile/mage/sh"
+import (
+	"fmt"
+
+	"github.com/go-git/go-git/v5"
+	"github.com/magefile/mage/sh"
+)
 
 // GoModTidy will run go mod tidy and check if there are any pending changes in git. Will fail if changes are pending.
 func GoModTidy() error {
@@ -8,5 +13,29 @@ func GoModTidy() error {
 	if err != nil {
 		return err
 	}
-	return sh.RunV("git", "diff-index", "--quiet", "HEAD")
+
+	gitRepo, err := git.PlainOpen(".")
+
+	if err != nil {
+		return err
+	}
+
+	worktree, err := gitRepo.Worktree()
+
+	if err != nil {
+		return err
+	}
+
+	status, err := worktree.Status()
+
+	if err != nil {
+		return err
+	}
+
+	if !status.IsClean() {
+
+		return fmt.Errorf("git status is not clean: \n%s", status.String())
+	}
+
+	return nil
 }
